@@ -34,10 +34,11 @@ export default function SiteFooter() {
                     className="flex flex-col space-y-2"
                 >
                     <h3 className="text-lg font-semibold text-white mb-3">Quick Links</h3>
-                    <a href="#features" className="hover:text-purple-400 transition">Features</a>
+                    <a href="/docs" className="hover:text-purple-400 transition">Documentation</a>
+                    <a href="/api" className="hover:text-purple-400 transition">API Playground</a>
+                    <a href="/dashboard" className="hover:text-purple-400 transition">Dashboard</a>
                     <a href="#pricing" className="hover:text-purple-400 transition">Pricing</a>
-                    <a href="#developers" className="hover:text-purple-400 transition">Developers</a>
-                    <a href="#contact" className="hover:text-purple-400 transition">Contact</a>
+                    <a href="#developers" className="hover:text-purple-400 transition">About Us</a>
                 </motion.div>
 
                 {/* Social + Newsletter */}

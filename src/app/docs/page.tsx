@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import DocsNavbar from "@/components/docs/DocsNavbar";
 import SidebarNav from "@/components/docs/SidebarNav";
 import QuickStart from "@/components/docs/QuickStart";
 import ApiEndpoint from "@/components/docs/ApiEndpoint";
@@ -13,7 +12,9 @@ import {
   Database,
   CheckCircle,
   AlertTriangle,
-  Zap
+  Zap,
+  Download,
+  Key
 } from "lucide-react";
 
 export default function DocsPage() {
@@ -23,10 +24,25 @@ export default function DocsPage() {
     const handleScroll = () => {
       const sections = [
         "quickstart",
+        "installation",
+        "first-call",
+        "api-keys",
         "authentication", 
+        "registration",
+        "login",
         "api-reference",
+        "scraper-endpoint",
+        "rate-limits",
+        "response-format",
         "limits",
-        "examples"
+        "pricing-plans",
+        "usage-dashboard",
+        "analytics",
+        "examples",
+        "curl-examples",
+        "javascript",
+        "python",
+        "nodejs"
       ];
       
       for (const section of sections) {
@@ -206,10 +222,8 @@ crawler.scrape('https://example.com')
   .catch(error => console.error(error));`;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DocsNavbar />
-      
-      <div className="flex pt-16">
+    <div className="min-h-screen bg-gray-50">      
+      <div className="flex pt-0">
         {/* Sidebar */}
         <div className="hidden lg:block">
           <SidebarNav activeSection={activeSection} />
@@ -550,6 +564,807 @@ crawler.scrape('https://example.com')
                   <CodeBlock code={nodejsExample} language="javascript" />
                 </motion.div>
               </div>
+            </div>
+          </section>
+
+          {/* Installation Section */}
+          <section id="installation" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <Download className="w-8 h-8 text-teal-500" />
+                  <h2 className="text-4xl font-bold text-gray-900">Installation Guide</h2>
+                </div>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Get up and running with Neo Crawl in your favorite programming environment.
+                </p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="bg-gray-50 rounded-2xl p-8"
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">No Installation Required!</h3>
+                  <p className="text-gray-600 mb-6">
+                    Neo Crawl is a REST API service - no installation needed. Just get your API key and start making requests.
+                  </p>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span>Works with any programming language</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span>No dependencies to manage</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <span>Always up-to-date</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8"
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">SDKs & Wrappers</h3>
+                  <p className="text-gray-600 mb-6">
+                    While not required, we provide helpful code examples and wrapper functions for popular languages.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <Code className="w-5 h-5 text-teal-600" />
+                      <span>JavaScript/TypeScript</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Code className="w-5 h-5 text-teal-600" />
+                      <span>Python</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Code className="w-5 h-5 text-teal-600" />
+                      <span>Node.js</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Code className="w-5 h-5 text-teal-600" />
+                      <span>cURL examples</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* First API Call Section */}
+          <section id="first-call" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <Zap className="w-8 h-8 text-teal-500" />
+                  <h2 className="text-4xl font-bold text-gray-900">Your First API Call</h2>
+                </div>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Let&apos;s make your first successful API call step by step.
+                </p>
+              </motion.div>
+
+              <div className="space-y-8">
+                <div className="bg-white rounded-2xl shadow-lg p-8">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Step-by-Step Tutorial</h3>
+                  
+                  <div className="space-y-6">
+                    <div className="flex gap-4">
+                      <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Get Your API Key</h4>
+                        <p className="text-gray-600">After registration, generate your secret API key from the dashboard.</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-4">
+                      <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-sm">2</div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Choose a URL to Scrape</h4>
+                        <p className="text-gray-600">Start with a simple website like <code className="bg-gray-100 px-2 py-1 rounded">https://example.com</code></p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-4">
+                      <div className="w-8 h-8 bg-teal-500 text-white rounded-full flex items-center justify-center font-bold text-sm">3</div>
+                      <div>
+                        <h4 className="font-semibold text-gray-900 mb-2">Make the Request</h4>
+                        <p className="text-gray-600">Send a GET request with your API key in the header.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <CodeBlock 
+                      code={`curl -X GET "https://api.neocrawl.com/api/scrapper?url=https://example.com" \\
+  -H "x-api-key: YOUR_API_KEY"`}
+                      language="bash"
+                      title="Your First API Call"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* API Keys Section */}
+          <section id="api-keys" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <Key className="w-8 h-8 text-teal-500" />
+                  <h2 className="text-4xl font-bold text-gray-900">API Key Management</h2>
+                </div>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Learn how to securely manage and use your API keys.
+                </p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-2 gap-8 mb-12">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="bg-amber-50 border border-amber-200 rounded-2xl p-6"
+                >
+                  <div className="flex items-start gap-3">
+                    <Shield className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-amber-800 mb-2">Security Best Practices</h3>
+                      <ul className="text-amber-700 space-y-1 text-sm">
+                        <li>• Never expose your API key in client-side code</li>
+                        <li>• Use environment variables to store keys</li>
+                        <li>• Regenerate keys if compromised</li>
+                        <li>• Monitor usage for unusual activity</li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="bg-green-50 border border-green-200 rounded-2xl p-6"
+                >
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-green-800 mb-2">Key Features</h3>
+                      <ul className="text-green-700 space-y-1 text-sm">
+                        <li>• Generate unlimited API keys</li>
+                        <li>• Real-time usage tracking</li>
+                        <li>• Instant key regeneration</li>
+                        <li>• Detailed analytics dashboard</li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              <CodeBlock 
+                code={`# Store your API key securely
+export NEO_CRAWL_API_KEY="ncl_sk_1234567890abcdef..."
+
+# Use in your requests
+curl -H "x-api-key: $NEO_CRAWL_API_KEY" \\
+  "https://api.neocrawl.com/api/scrapper?url=https://example.com"`}
+                language="bash"
+                title="Environment Variable Setup"
+              />
+            </div>
+          </section>
+
+          {/* Registration Section */}
+          <section id="registration" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900">Account Registration</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Create your Neo Crawl account to start scraping websites.
+                </p>
+              </motion.div>
+
+              <ApiEndpoint
+                method="POST"
+                endpoint="/auth/register"
+                title="Create New Account"
+                description="Register a new user account with username and password."
+                parameters={[
+                  { name: "username", type: "string", required: true, description: "Unique username (3-50 characters)" },
+                  { name: "password", type: "string", required: true, description: "Strong password (minimum 8 characters)" }
+                ]}
+                requestExample={registerExample}
+                responseExample={registerResponse}
+              />
+            </div>
+          </section>
+
+          {/* Login Section */}
+          <section id="login" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900">User Login</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Authenticate to access protected endpoints and manage your account.
+                </p>
+              </motion.div>
+
+              <ApiEndpoint
+                method="POST"
+                endpoint="/auth/login"
+                title="User Authentication"
+                description="Login with your credentials to receive an access token."
+                parameters={[
+                  { name: "username", type: "string", required: true, description: "Your registered username" },
+                  { name: "password", type: "string", required: true, description: "Your account password" }
+                ]}
+                requestExample={loginExample}
+                responseExample={loginResponse}
+                requestLanguage="text"
+              />
+            </div>
+          </section>
+
+          {/* Scraper Endpoint Section */}
+          <section id="scraper-endpoint" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <Database className="w-8 h-8 text-teal-500" />
+                  <h2 className="text-4xl font-bold text-gray-900">Scraper Endpoint</h2>
+                </div>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  The main endpoint for extracting structured data from any website URL.
+                </p>
+              </motion.div>
+
+              <ApiEndpoint
+                method="GET"
+                endpoint="/api/scrapper"
+                title="Scrape Website Data"
+                description="Extract structured data from any website URL. Returns JSON, text, and markdown formats."
+                parameters={[
+                  { name: "url", type: "string", required: true, description: "The URL to scrape (must be properly encoded)" }
+                ]}
+                headers={[
+                  { name: "x-api-key", value: "YOUR_API_KEY", description: "Your secret API key" }
+                ]}
+                requestExample={scrapeExample}
+                responseExample={scrapeResponse}
+                requestLanguage="bash"
+              />
+            </div>
+          </section>
+
+          {/* Rate Limits Section */}
+          <section id="rate-limits" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <BarChart3 className="w-8 h-8 text-teal-500" />
+                  <h2 className="text-4xl font-bold text-gray-900">Rate Limits</h2>
+                </div>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Understanding rate limits and how to optimize your API usage.
+                </p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-3 gap-8 mb-12">
+                {[
+                  { plan: "Free", rate: "1 req/sec", burst: "5 requests", monthly: "10 calls" },
+                  { plan: "Starter", rate: "2 req/sec", burst: "10 requests", monthly: "20 calls" },
+                  { plan: "Pro", rate: "5 req/sec", burst: "25 requests", monthly: "30 calls" }
+                ].map((tier, index) => (
+                  <motion.div
+                    key={tier.plan}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6"
+                  >
+                    <h3 className="text-xl font-bold text-gray-900 mb-4">{tier.plan}</h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Rate Limit:</span>
+                        <span className="font-semibold">{tier.rate}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Burst:</span>
+                        <span className="font-semibold">{tier.burst}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Monthly:</span>
+                        <span className="font-semibold">{tier.monthly}</span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="bg-blue-50 border border-blue-200 rounded-2xl p-6"
+              >
+                <h3 className="font-semibold text-blue-800 mb-3">Rate Limit Headers</h3>
+                <p className="text-blue-700 mb-4">Every API response includes rate limit information in the headers:</p>
+                <CodeBlock 
+                  code={`X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 59
+X-RateLimit-Reset: 1640995200
+X-RateLimit-Retry-After: 3600`}
+                  language="text"
+                />
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Response Format Section */}
+          <section id="response-format" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <Database className="w-8 h-8 text-teal-500" />
+                  <h2 className="text-4xl font-bold text-gray-900">Response Formats</h2>
+                </div>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                  Neo Crawl provides multiple response formats to suit your needs.
+                </p>
+              </motion.div>
+
+              <div className="grid lg:grid-cols-3 gap-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-6"
+                >
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">result1 (JSON)</h3>
+                  <p className="text-gray-600 mb-4">Structured data with metadata, links, images, and more.</p>
+                  <CodeBlock 
+                    code={`{
+  "title": "Page Title",
+  "meta_description": "...",
+  "headings": {...},
+  "links": [...],
+  "images": [...]
+}`}
+                    language="json"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6"
+                >
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">result2 (Text)</h3>
+                  <p className="text-gray-600 mb-4">Clean, readable text content without HTML tags.</p>
+                  <CodeBlock 
+                    code={`Page Title
+
+This is the main content
+of the webpage in clean
+text format...`}
+                    language="text"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6"
+                >
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">result3 (Markdown)</h3>
+                  <p className="text-gray-600 mb-4">Formatted markdown ready for documentation or blogs.</p>
+                  <CodeBlock 
+                    code={`# Page Title
+
+This is the main **content**
+of the webpage in clean
+[markdown](link) format...`}
+                    language="markdown"
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* Pricing Plans Section */}
+          <section id="pricing-plans" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900">Pricing Plans</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Choose the plan that fits your scraping needs.
+                </p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-3 gap-8">
+                {[
+                  {
+                    plan: "Free",
+                    planNumber: 0,
+                    price: "$0",
+                    calls: "10",
+                    features: ["10 API calls/month", "Basic support", "JSON + Text output", "Rate limit: 1/sec"]
+                  },
+                  {
+                    plan: "Starter",
+                    planNumber: 1,
+                    price: "$9",
+                    calls: "20",
+                    features: ["20 API calls/month", "Email support", "All output formats", "Rate limit: 2/sec"],
+                    popular: true
+                  },
+                  {
+                    plan: "Pro",
+                    planNumber: 2,
+                    price: "$29",
+                    calls: "30",
+                    features: ["30 API calls/month", "Priority support", "Advanced features", "Rate limit: 5/sec"]
+                  }
+                ].map((tier, index) => (
+                  <motion.div
+                    key={tier.plan}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className={`relative bg-white rounded-2xl shadow-lg border-2 p-8 ${
+                      tier.popular ? 'border-teal-500 scale-105' : 'border-gray-200'
+                    }`}
+                  >
+                    {tier.popular && (
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                          Most Popular
+                        </span>
+                      </div>
+                    )}
+                    <div className="text-center">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{tier.plan}</h3>
+                      <div className="text-4xl font-bold text-gray-900 mb-1">{tier.price}</div>
+                      <div className="text-gray-500 mb-6">per month</div>
+                      <div className="text-lg font-semibold text-teal-600 mb-6">
+                        {tier.calls} API calls included
+                      </div>
+                      <ul className="space-y-3 mb-8">
+                        {tier.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
+                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                            <span className="text-gray-600">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 ${
+                          tier.popular
+                            ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white shadow-lg hover:shadow-xl'
+                            : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                        }`}
+                      >
+                        Get Started
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Usage Dashboard Section */}
+          <section id="usage-dashboard" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900">Usage Dashboard</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Monitor your API usage and track analytics in real-time.
+                </p>
+              </motion.div>
+
+              <ApiEndpoint
+                method="GET"
+                endpoint="/usage/dashboard"
+                title="Get Usage Statistics"
+                description="Retrieve comprehensive usage analytics and account information."
+                headers={[
+                  { name: "Authorization", value: "Bearer YOUR_ACCESS_TOKEN", description: "Access token from login" }
+                ]}
+                requestExample={dashboardExample}
+                responseExample={dashboardResponse}
+                requestLanguage="bash"
+              />
+            </div>
+          </section>
+
+          {/* Analytics Section */}
+          <section id="analytics" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900">Analytics & Insights</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Gain insights into your scraping patterns and optimize your usage.
+                </p>
+              </motion.div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="bg-white rounded-2xl shadow-lg p-8"
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Available Metrics</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                      <span>Total API calls made</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      <span>Success rate percentage</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span>Average response time</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
+                      <span>Most scraped domains</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                      <span>Daily/weekly/monthly trends</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8"
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Optimization Tips</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Batch Requests</h4>
+                        <p className="text-gray-600 text-sm">Group similar URLs to maximize efficiency</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Cache Results</h4>
+                        <p className="text-gray-600 text-sm">Store frequently accessed data locally</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <h4 className="font-semibold text-gray-900">Monitor Limits</h4>
+                        <p className="text-gray-600 text-sm">Track usage to avoid hitting rate limits</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* cURL Examples Section */}
+          <section id="curl-examples" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900">cURL Examples</h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Ready-to-use cURL commands for testing and automation.
+                </p>
+              </motion.div>
+
+              <div className="space-y-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Basic Scraping</h3>
+                  <CodeBlock 
+                    code={`# Simple scrape request
+curl -X GET "https://api.neocrawl.com/api/scrapper?url=https://example.com" \\
+  -H "x-api-key: YOUR_API_KEY" \\
+  -H "Content-Type: application/json"`}
+                    language="bash"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">With Error Handling</h3>
+                  <CodeBlock 
+                    code={`# Scrape with error handling and output formatting
+curl -X GET "https://api.neocrawl.com/api/scrapper?url=https://example.com" \\
+  -H "x-api-key: YOUR_API_KEY" \\
+  -w "HTTP Status: %{http_code}\\nResponse Time: %{time_total}s\\n" \\
+  -s -S \\
+  | jq '.'`}
+                    language="bash"
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Batch Processing</h3>
+                  <CodeBlock 
+                    code={`# Process multiple URLs
+urls=("https://example.com" "https://google.com" "https://github.com")
+
+for url in "\${urls[@]}"; do
+  echo "Scraping: $url"
+  curl -X GET "https://api.neocrawl.com/api/scrapper?url=$url" \\
+    -H "x-api-key: YOUR_API_KEY" \\
+    -s | jq '.result1.title'
+  sleep 1  # Respect rate limits
+done`}
+                    language="bash"
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* JavaScript Examples Section */}
+          <section id="javascript" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
+                  <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">JS</span>
+                  </div>
+                  JavaScript Examples
+                </h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Ready-to-use JavaScript code for browser and Node.js environments.
+                </p>
+              </motion.div>
+
+              <CodeBlock code={jsExample} language="javascript" />
+            </div>
+          </section>
+
+          {/* Python Examples Section */}
+          <section id="python" className="py-20 bg-gradient-to-br from-gray-50 to-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">PY</span>
+                  </div>
+                  Python Examples
+                </h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Python class and examples for easy integration.
+                </p>
+              </motion.div>
+
+              <CodeBlock code={pythonExample} language="python" />
+            </div>
+          </section>
+
+          {/* Node.js Examples Section */}
+          <section id="nodejs" className="py-20 bg-white">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className="text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
+                  <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">JS</span>
+                  </div>
+                  Node.js Examples
+                </h2>
+                <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-4">
+                  Server-side JavaScript implementation with axios.
+                </p>
+              </motion.div>
+
+              <CodeBlock code={nodejsExample} language="javascript" />
             </div>
           </section>
 

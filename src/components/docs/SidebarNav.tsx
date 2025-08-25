@@ -44,8 +44,8 @@ const sidebarItems = [
     title: "Usage & Limits",
     icon: BarChart3,
     items: [
-      { title: "Pricing Plans", href: "#pricing" },
-      { title: "Usage Dashboard", href: "#dashboard" },
+      { title: "Pricing Plans", href: "#pricing-plans" },
+      { title: "Usage Dashboard", href: "#usage-dashboard" },
       { title: "Analytics", href: "#analytics" }
     ]
   },
@@ -69,7 +69,9 @@ export default function SidebarNav({ activeSection }: SidebarNavProps) {
   const [expandedSections, setExpandedSections] = useState<string[]>([
     "Getting Started",
     "Authentication",
-    "API Reference"
+    "API Reference",
+    "Usage & Limits",
+    "Examples"
   ]);
 
   const toggleSection = (title: string) => {
@@ -91,7 +93,7 @@ export default function SidebarNav({ activeSection }: SidebarNavProps) {
     <motion.div
       initial={{ x: -300 }}
       animate={{ x: 0 }}
-      className="w-80 bg-white border-r border-gray-200 h-screen sticky top-16 overflow-y-auto"
+      className="w-80 bg-white border-r border-gray-200 h-screen sticky top-0 overflow-y-auto"
     >
       <div className="p-6">
         <div className="flex items-center gap-3 mb-8">

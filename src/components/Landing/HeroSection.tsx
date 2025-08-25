@@ -1,5 +1,4 @@
 'use client'
-import Image from 'next/image'
 import React from 'react'
 import { motion } from "framer-motion"
 import { Safari } from './HeroLaptop'
@@ -28,17 +27,34 @@ const HeroSection = () => {
                             Discover the ultimate web scraping service that empowers businesses to extract
                         </p>
 
-                        <div className="relative flex w-fit h-fit mt-6 group">
-                            <button
+                        <div className="relative flex gap-4 w-fit h-fit mt-6 group">
+                            <motion.a
+                                href="/docs"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                                 aria-label="Get started with our web scraping service"
+                                className="block"
                             >
                                 <div className='bg-gradient-to-br from-indigo-300 via-purple-300 to-pink-300 p-1 rounded-2xl shadow shadow-black/40'>
-                                    <span className="relative block rounded-xl bg-white/70 backdrop-blur-2xl px-7 py-2">
+                                    <span className="relative block rounded-xl bg-white/70 backdrop-blur-2xl px-7 py-2 font-semibold">
                                         Get Started
                                     </span>
                                 </div>
-                            </button>
+                            </motion.a>
 
+                            <motion.a
+                                href="/api"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                aria-label="Try our API playground"
+                                className="block"
+                            >
+                                <div className='border-2 border-gray-300 p-1 rounded-2xl hover:border-gray-400 transition-colors'>
+                                    <span className="relative block rounded-xl bg-transparent px-7 py-2 font-semibold text-gray-700">
+                                        Try API
+                                    </span>
+                                </div>
+                            </motion.a>
                         </div>
                     </div>
                 </article>
