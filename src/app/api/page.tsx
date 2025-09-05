@@ -1,7 +1,9 @@
 'use client'
 import SiteNavbar from "@/components/basic/SiteNavbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from 'framer-motion'
+import ReactMarkdown from "react-markdown";
+
 
 export default function ScraperTester() {
     const [url, setUrl] = useState<string>("");
@@ -14,20 +16,77 @@ export default function ScraperTester() {
         markdown: "",
         n8n: "",
     });
+    const [error, setError] = useState("");
+    const [scraperResult, setScraperResult] = useState<unknown>(null);
+    const [secretToken, setSecretToken] = useState("");
 
-    const apiKey: string = "YOUR_PREPOPULATED_API_KEY";
+    const handleScrape = async () => {
+        setError("");
+        setScraperResult(null);
+        console.log("ss")
 
-    const handleScrape = (): void => {
-        setLoading(true);
-        // Mock scrape result
-        setTimeout(() => {
-            setResult({
-                json: JSON.stringify({ title: "Sample Title", data: [1, 2, 3] }, null, 2),
-                markdown: `# Sample Markdown\n- Item 1\n- Item 2`,
-                n8n: JSON.stringify({ workflow: "n8n format here" }, null, 2),
+        if (!url.trim()) {
+            setError("Please enter a valid URL");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            // Get access token from localStorage
+            const accessToken = localStorage.getItem("token");
+            if (!accessToken) {
+                console.log("Not logged in. Please login first.")
+                setError("Not logged in. Please login first.");
+                return;
+            }
+
+
+            // Step 1: Call /auth/get-secret
+            const secretRes = await fetch("http://localhost:8000/auth/get-secret", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
             });
+
+            if (!secretRes.ok) {
+                const data = await secretRes.json();
+                throw new Error(data.detail || "Failed to get secret token");
+            }
+
+            const secretData = await secretRes.json();
+            setSecretToken(secretData.secret_token);
+            console.log(secretData);
+            // Step 2: Call /scrapper with x-api-key
+            const scraperRes = await fetch(
+                `http://localhost:8000/api/scrapper?url=${encodeURIComponent(url)}`,
+                {
+                    headers: {
+                        "X-Api-Key": secretData.secret_token,
+                    },
+                }
+            );
+            console.log(scraperRes);
+
+            if (!scraperRes.ok) {
+                const data = await scraperRes.json();
+                throw new Error(data.detail || "Scraper request failed");
+            }
+
+            const scraperData = await scraperRes.json();
+            setScraperResult(scraperData);
+            setResult({
+                json: scraperData.result2,
+                markdown: JSON.parse(scraperData.result1).markdown,
+                n8n: ""
+            })
+            console.log(scraperData);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            setError(err.message || "Unknown error");
+        } finally {
             setLoading(false);
-        }, 1200);
+        }
     };
 
     return (
@@ -63,10 +122,10 @@ export default function ScraperTester() {
             /> */}
 
             <div
-                className="absolute inset-0 z-0"
+                className="absolute inset-0 z-0 h-screen max-h-[800px]"
                 style={{
                     backgroundImage: `
-        linear-gradient(to right, rgba(79,70,229,0.3) 1px, transparent 1px),
+        linear-gradient(to right, #0b4f4a30 1px, transparent 1px),
         linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
       `,
                     backgroundSize: "40px 40px",
@@ -93,15 +152,7 @@ export default function ScraperTester() {
                         placeholder="www.example.com"
                         className="z-10 flex-1 outline-none text-gray-800"
                     />
-                    {/* <select
-                        value={format}
-                        onChange={(e) => setFormat(e.target.value)}
-                        className="px-4 py-2 rounded-xl border border-gray-300 bg-white text-gray-700 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 hover:border-purple-400 transition-all duration-200 cursor-pointer"
-                    >
-                        <option value="markdown">📄 Format: Markdown</option>
-                        <option value="json">🗂 Format: JSON</option>
-                        <option value="n8n">⚙️ Format: n8n</option>
-                    </select> */}
+
 
                     <div className="z-10 p-1 rounded-xl bg-white shadow border border-gray-400/10">
                         <button
@@ -142,7 +193,13 @@ export default function ScraperTester() {
 
                     <div className="p-6 bg-gray-50 font-mono text-sm overflow-x-auto">
                         {activeTab === "markdown" && (
-                            <pre>{result.markdown || "⚡ Run scrape to see Markdown output..."}</pre>
+                            <div className="prose max-w-none">
+                                {result.markdown ? (
+                                    <ReactMarkdown>{result.markdown}</ReactMarkdown>
+                                ) : (
+                                    "⚡ Run scrape to see Markdown output..."
+                                )}
+                            </div>
                         )}
                         {activeTab === "json" && (
                             <pre>{result.json || "⚡ Run scrape to see JSON response..."}</pre>

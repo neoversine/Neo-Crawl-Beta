@@ -14,7 +14,7 @@ export default function ApiKeyManager() {
             const res = await axios.get('http://127.0.0.1:8000/auth/get-secret', {
                 headers: {
                     accept: 'application/json',
-                    Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZW8iLCJleHAiOjE3NTU4NTUxOTN9._MGjoABCRT5C9csQikNRkw02oQgD2YEquCROsxLGfKY`, // replace with real token handling
+                    Authorization: `Bearer ${localStorage.getItem("token")}`, // replace with real token handling
                 },
                 withCredentials: true,
             })
@@ -33,7 +33,7 @@ export default function ApiKeyManager() {
                 {
                     headers: {
                         accept: 'application/json',
-                        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZW8iLCJleHAiOjE3NTU4NTUxOTN9._MGjoABCRT5C9csQikNRkw02oQgD2YEquCROsxLGfKY`,
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                     withCredentials: true,
                 }

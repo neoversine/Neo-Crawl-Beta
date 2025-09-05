@@ -247,7 +247,7 @@ export default function UsageDashboard() {
                 const res = await axios.get<DashboardData>("http://127.0.0.1:8000/usage/dashboard", {
                     // withCredentials: false, // 🔑 important if cookies/sessions needed
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJuZW8iLCJleHAiOjE3NTU4NTUxOTN9._MGjoABCRT5C9csQikNRkw02oQgD2YEquCROsxLGfKY"}`, // if token-based
+                        Authorization: `Bearer ${localStorage.getItem("token")}`, // if token-based
                     },
                 });
                 console.log(res.data)
