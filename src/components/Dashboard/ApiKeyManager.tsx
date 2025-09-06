@@ -11,7 +11,7 @@ export default function ApiKeyManager() {
 
     const fetchSecret = async () => {
         try {
-            const res = await axios.get('http://127.0.0.1:8000/auth/get-secret', {
+            const res = await axios.get('https://fasttools.neoversine.in/auth/get-secret', {
                 headers: {
                     accept: 'application/json',
                     Authorization: `Bearer ${localStorage.getItem("token")}`, // replace with real token handling
@@ -28,7 +28,7 @@ export default function ApiKeyManager() {
         setLoading(true)
         try {
             const res = await axios.post(
-                'http://127.0.0.1:8000/auth/generate-secret',
+                'https://fasttools.neoversine.in/auth/generate-secret',
                 {},
                 {
                     headers: {
@@ -72,7 +72,7 @@ export default function ApiKeyManager() {
                     <button
                         onClick={regenerateSecret}
                         disabled={loading}
-                        className="flex items-center gap-1 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-400  text-white px-3 py-3 rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50  shadow-inner shadow-black/50 hover:shadow active:shadow-none"
+                        className="flex items-center gap-1 bg-gradient-to-br from-lime-300 via-teal-400 to-cyan-400  text-white px-3 py-3 rounded-lg hover:bg-gray-800 transition-all disabled:opacity-50  shadow-inner shadow-black/50 hover:shadow active:shadow-none"
                     >
                         <RefreshCcw size={16} /> {loading ? 'Generating...' : 'Regenerate'}
                     </button>

@@ -43,7 +43,7 @@ export default function ScraperTester() {
 
 
             // Step 1: Call /auth/get-secret
-            const secretRes = await fetch("http://localhost:8000/auth/get-secret", {
+            const secretRes = await fetch("https://fasttools.neoversine.in/auth/get-secret", {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -59,7 +59,7 @@ export default function ScraperTester() {
             console.log(secretData);
             // Step 2: Call /scrapper with x-api-key
             const scraperRes = await fetch(
-                `http://localhost:8000/api/scrapper?url=${encodeURIComponent(url)}`,
+                `https://fasttools.neoversine.in/api/scrapper?url=${encodeURIComponent(url)}`,
                 {
                     headers: {
                         "X-Api-Key": secretData.secret_token,

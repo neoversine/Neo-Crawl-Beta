@@ -12,6 +12,8 @@ import {
 import axios from "axios";
 import ApiKeyManager from "@/components/Dashboard/ApiKeyManager";
 import DailyCalls, { CustomTooltip } from "@/components/Dashboard/DailyCalls";
+import SiteFooter from "@/components/basic/SiteFooter";
+import SiteNavbar from "@/components/basic/SiteNavbar";
 
 // ---------------- Types ----------------
 interface DailyTrendItem {
@@ -106,9 +108,9 @@ function ProgressRing({ value, size = 120, stroke = 10 }: ProgressRingProps) {
             {/* Gradient definition */}
             <defs>
                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#6366F1" /> {/* Indigo-500 */}
-                    <stop offset="60%" stopColor="#8B5CF6" /> {/* Purple-500 */}
-                    <stop offset="100%" stopColor="#EC4899" /> {/* Pink-500 */}
+                    <stop offset="0%" stopColor="#A3E635" /> {/* lime-300 */}
+                    <stop offset="60%" stopColor="#2DD4BF" /> {/* teal-400 */}
+                    <stop offset="100%" stopColor="#22D3EE" /> {/* cyan-400 */}
                 </linearGradient>
             </defs>
 
@@ -117,7 +119,7 @@ function ProgressRing({ value, size = 120, stroke = 10 }: ProgressRingProps) {
                 cx={size / 2}
                 cy={size / 2}
                 r={radius}
-                stroke="#eeeeee"
+                stroke="#e5e7eb" // gray-200 background ring
                 strokeWidth={stroke}
                 fill="none"
             />
@@ -142,11 +144,12 @@ function ProgressRing({ value, size = 120, stroke = 10 }: ProgressRingProps) {
                 y="50%"
                 dominantBaseline="middle"
                 textAnchor="middle"
-                className="fill-black font-semibold text-xl"
+                className="fill-gray-900 font-semibold text-xl"
             >
                 {value}%
             </text>
         </svg>
+
     );
 }
 
@@ -156,15 +159,14 @@ function StatCard({ title, value, subtitle, icon: Icon, accent = false }: StatCa
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="bg-gradient-to-r from-indigo-100 via-purple-200 to-pink-200 text-white p-1 rounded-2xl shadow-lg transition-transform hover:scale-[1.01]">
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="p-1 rounded-2xl shadow-lg transition-transform hover:scale-[1.01] 
+             bg-gradient-to-r from-lime-300/40 via-teal-400/40 to-cyan-400/40"
+        >
             <div
-
                 className={classNames(
-                    "group relative flex items-center justify-between rounded-xl p-6 ",
-                    accent
-                        ? "bg-gradient-to-r from-indigo-500/20 via-purple-500/30 to-pink-500/20 text-white"
-                        : "bg-white"
+                    "group relative flex items-center justify-between rounded-xl p-6",
+                    accent ? "bg-gray-900 text-white" : "bg-white"
                 )}
             >
                 {/* Left content */}
@@ -172,7 +174,7 @@ function StatCard({ title, value, subtitle, icon: Icon, accent = false }: StatCa
                     <p
                         className={classNames(
                             "text-xs uppercase tracking-wide font-semibold",
-                            accent ? "text-white/80" : "text-gray-500"
+                            accent ? "text-gray-300" : "text-gray-500"
                         )}
                     >
                         {title}
@@ -180,7 +182,7 @@ function StatCard({ title, value, subtitle, icon: Icon, accent = false }: StatCa
                     <h3
                         className={classNames(
                             "text-3xl font-bold",
-                            accent ? "text-white" : "text-black"
+                            accent ? "text-white" : "text-gray-900"
                         )}
                     >
                         {value}
@@ -189,7 +191,7 @@ function StatCard({ title, value, subtitle, icon: Icon, accent = false }: StatCa
                         <p
                             className={classNames(
                                 "text-sm",
-                                accent ? "text-white/70" : "text-gray-500"
+                                accent ? "text-gray-400" : "text-gray-500"
                             )}
                         >
                             {subtitle}
@@ -201,21 +203,16 @@ function StatCard({ title, value, subtitle, icon: Icon, accent = false }: StatCa
                 <div
                     className={classNames(
                         "flex items-center justify-center h-14 w-14 rounded-xl shadow-md transition-colors",
-                        accent ? "bg-white/20 text-white" : "bg-indigo-100 text-indigo-600"
+                        accent
+                            ? "bg-gradient-to-br from-lime-400/30 via-teal-500/30 to-cyan-400/30 text-white"
+                            : "bg-gradient-to-br from-lime-100 via-teal-100 to-cyan-100 text-indigo-600"
                     )}
                 >
                     <Icon className="h-6 w-6" />
                 </div>
-
-                {/* Hover ring effect */}
-                {/* <div
-                    className={classNames(
-                        "pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset transition-all",
-                        accent ? "ring-white/20 group-hover:ring-white/40" : "ring-black/5 group-hover:ring-black/20"
-                    )}
-                /> */}
-            </div >
+            </div>
         </motion.div>
+
 
 
     );
@@ -223,15 +220,16 @@ function StatCard({ title, value, subtitle, icon: Icon, accent = false }: StatCa
 
 function Section({ title, children, action }: SectionProps) {
     return (
-        <div className="bg-gradient-to-r from-indigo-100 via-purple-200 to-pink-200 text-white p-1 rounded-2xl shadow">
-            <section className="rounded-2xl border border-black/10 bg-white p-5 h-full">
+        <div className="bg-gradient-to-r from-lime-300/40 via-teal-400/40 to-cyan-400/40 p-1 rounded-2xl shadow">
+            <section className="rounded-2xl border border-black/5 bg-white p-5 h-full">
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="font-semibold text-black">{title}</h2>
+                    <h2 className="font-semibold text-gray-900">{title}</h2>
                     {action}
                 </div>
                 {children}
             </section>
         </div>
+
     );
 }
 
@@ -244,7 +242,7 @@ export default function UsageDashboard() {
     useEffect(() => {
         const fetchDashboard = async () => {
             try {
-                const res = await axios.get<DashboardData>("http://127.0.0.1:8000/usage/dashboard", {
+                const res = await axios.get<DashboardData>("https://fasttools.neoversine.in/usage/dashboard", {
                     // withCredentials: false, // 🔑 important if cookies/sessions needed
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`, // if token-based
@@ -288,6 +286,7 @@ export default function UsageDashboard() {
     return (
         <div className="min-h-screen w-full bg-white text-black">
             {/* Top Bar */}
+            <SiteNavbar />
             <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur">
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
                     <div className="flex items-center gap-3">
