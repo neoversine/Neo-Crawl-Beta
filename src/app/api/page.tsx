@@ -10,11 +10,11 @@ export default function ScraperTester() {
 
     const [format, setFormat] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
-    const [activeTab, setActiveTab] = useState<"json" | "markdown" | "n8n" | "ai">("markdown");
-    const [result, setResult] = useState<{ json: string; markdown: string; n8n: string }>({
+    const [activeTab, setActiveTab] = useState<"json" | "markdown" | "text" | "ai">("markdown");
+    const [result, setResult] = useState<{ json: string; markdown: string; text: string }>({
         json: "",
         markdown: "",
-        n8n: "",
+        text: "",
     });
     const [error, setError] = useState("");
     const [scraperResult, setScraperResult] = useState<unknown>(null);
@@ -72,10 +72,102 @@ export default function ScraperTester() {
 
             const scraperData = await scraperRes.json();
             setScraperResult(scraperData);
+            
+            // Try to parse result1, handle errors gracefully
+            let parsedResult1;
+            try {
+                parsedResult1 = JSON.parse(scraperData.result1);
+            } catch (error) {
+                console.error("Failed to parse result1:", error);
+                parsedResult1 = {
+                    json: null,
+                    markdown: "Failed to parse markdown content",
+                    html: "",
+                    links: [],
+                    summary: "",
+                    metadata: {}
+                };
+            }
+            
+            // Format and structure the results properly - INCLUDE EVERYTHING
+            const formattedJSON = {
+                success: true,
+                message: scraperData.message || "API call successful",
+                url: scraperData.url || "Unknown URL",
+                api_usage: {
+                    calls_today: scraperData.calls_today || 0,
+                    calls_made_month: scraperData.calls_made_month || 0,
+                    plan_limit: scraperData.plan_limit || 0,
+                    last_reset: {
+                        daily: scraperData.last_day_reset || "Unknown",
+                        monthly: scraperData.last_month_reset || "Unknown"
+                    }
+                },
+                scraped_content: {
+                    // Raw results from API
+                    result1_structured: parsedResult1,
+                    result2_clean_text: scraperData.result2 || "No text content",
+                    result3_markdown: scraperData.result3 || "No markdown content",
+                    
+                    // Parsed structured data
+                    company_info: parsedResult1.json || {
+                        company_name: null,
+                        company_description: null
+                    },
+                    
+                    // All extracted content
+                    markdown_content: parsedResult1.markdown || "No markdown available",
+                    html_content: parsedResult1.html || "No HTML available",
+                    clean_text: parsedResult1.summary || "No summary available",
+                    
+                    // Links and navigation
+                    extracted_links: parsedResult1.links || [],
+                    
+                    // Technical metadata
+                    scrape_metadata: parsedResult1.metadata || {
+                        language: "unknown",
+                        scrapeId: "unknown",
+                        sourceURL: "unknown",
+                        url: "unknown",
+                        statusCode: 0,
+                        contentType: "unknown",
+                        proxyUsed: "unknown",
+                        cacheState: "unknown",
+                        creditsUsed: 0
+                    }
+                },
+                
+                // Include the complete raw response for debugging
+                raw_api_response: {
+                    full_result1: scraperData.result1,
+                    full_result2: scraperData.result2,
+                    full_result3: scraperData.result3,
+                    all_metadata: {
+                        calls_today: scraperData.calls_today,
+                        calls_made_month: scraperData.calls_made_month,
+                        plan_limit: scraperData.plan_limit,
+                        last_day_reset: scraperData.last_day_reset,
+                        last_month_reset: scraperData.last_month_reset,
+                        message: scraperData.message,
+                        url: scraperData.url
+                    }
+                }
+            };
+            
+            // Clean and format markdown (handle \n properly)
+            const cleanMarkdown = parsedResult1.markdown
+                ? parsedResult1.markdown.replace(/\\n/g, '\n').trim()
+                : 'No markdown content available';
+            
+            // Clean and format text (handle \n properly)  
+            const cleanText = scraperData.result2
+                ? scraperData.result2.replace(/\\n/g, '\n').replace(/={40,}/g, '\n---\n').trim()
+                : 'No text content available';
+            
             setResult({
-                json: scraperData.result2,
-                markdown: JSON.parse(scraperData.result1).markdown,
-                n8n: ""
+                json: JSON.stringify(formattedJSON, null, 2),
+                markdown: cleanMarkdown,
+                text: cleanText
             })
             
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -163,11 +255,28 @@ export default function ScraperTester() {
                     </div>
                 </div>
 
+                {/* Error Display */}
+                {error && (
+                    <div className="w-full max-w-3xl mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex items-center">
+                            <div className="text-red-400 mr-3">⚠️</div>
+                            <div>
+                                <h3 className="text-red-800 font-medium">Error occurred</h3>
+                                <p className="text-red-600 text-sm mt-1">{error}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Result Tabs */}
                 <div className="w-full max-w-5xl mt-10">
                     <div className="relative flex text-sm font-medium">
                         <motion.div
-                            animate={{ x: activeTab === "markdown" ? 0 : 125 }}
+                            animate={{ 
+                                x: activeTab === "markdown" ? 0 : 
+                                   activeTab === "json" ? 130 : 
+                                   activeTab === "text" ? 260 : 0 
+                            }}
                             transition={{
                                 type: "spring",
                                 stiffness: 200,
@@ -186,20 +295,97 @@ export default function ScraperTester() {
                         >
                             JSON Response
                         </button>
+                        <button
+                            onClick={() => setActiveTab("text")}
+                            className={`z-10 flex justify-center items-center h-12 w-32  ${activeTab === "text" ? " text-white" : "text-gray-500"}`}
+                        >
+                            Clean Text
+                        </button>
                     </div>
 
-                    <div className="p-6 bg-gray-50 font-mono text-sm overflow-x-auto">
+                    <div className="p-6 bg-gray-50 text-sm overflow-x-auto">
                         {activeTab === "markdown" && (
-                            <div className="prose max-w-none">
-                                {result.markdown ? (
-                                    <ReactMarkdown>{result.markdown}</ReactMarkdown>
+                            <div className="prose prose-sm max-w-none bg-white p-6 rounded-lg shadow-sm">
+                                {result.markdown && result.markdown !== 'No markdown content available' ? (
+                                    <ReactMarkdown 
+                                        components={{
+                                            h1: ({children}) => <h1 className="text-2xl font-bold text-gray-900 mb-4">{children}</h1>,
+                                            h2: ({children}) => <h2 className="text-xl font-semibold text-gray-800 mb-3">{children}</h2>,
+                                            h3: ({children}) => <h3 className="text-lg font-medium text-gray-700 mb-2">{children}</h3>,
+                                            p: ({children}) => <p className="text-gray-700 mb-3 leading-relaxed">{children}</p>,
+                                            ul: ({children}) => <ul className="list-disc list-inside text-gray-700 mb-3">{children}</ul>,
+                                            ol: ({children}) => <ol className="list-decimal list-inside text-gray-700 mb-3">{children}</ol>,
+                                            li: ({children}) => <li className="mb-1">{children}</li>,
+                                            code: ({children}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono">{children}</code>,
+                                            pre: ({children}) => <pre className="bg-gray-100 p-4 rounded-lg overflow-x-auto">{children}</pre>
+                                        }}
+                                    >
+                                        {result.markdown}
+                                    </ReactMarkdown>
                                 ) : (
-                                    "⚡ Run scrape to see Markdown output..."
+                                    <div className="text-center py-12">
+                                        <div className="text-gray-400 text-lg mb-2">📄</div>
+                                        <p className="text-gray-500 font-medium">No markdown content available</p>
+                                        <p className="text-gray-400 text-sm">Run a scrape to see formatted content</p>
+                                    </div>
                                 )}
                             </div>
                         )}
                         {activeTab === "json" && (
-                            <pre>{result.json || "⚡ Run scrape to see JSON response..."}</pre>
+                            <div className="bg-gray-900 p-6 rounded-lg shadow-sm">
+                                {result.json ? (
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="text-white font-medium">Structured Response</h3>
+                                            <button 
+                                                onClick={() => navigator.clipboard.writeText(result.json)}
+                                                className="text-gray-400 hover:text-white text-xs px-2 py-1 rounded border border-gray-600 hover:border-gray-400"
+                                            >
+                                                Copy JSON
+                                            </button>
+                                        </div>
+                                        <pre className="text-green-400 font-mono text-sm whitespace-pre-wrap overflow-x-auto">
+                                            {result.json}
+                                        </pre>
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <div className="text-gray-400 text-lg mb-2">⚡</div>
+                                        <p className="text-gray-300 font-medium">No JSON data available</p>
+                                        <p className="text-gray-400 text-sm">Run a scrape to see structured data</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {activeTab === "text" && (
+                            <div className="bg-white p-6 rounded-lg shadow-sm border">
+                                {result.text && result.text !== 'No text content available' ? (
+                                    <div className="font-sans text-gray-800 leading-relaxed">
+                                        {result.text.split('\n').map((line, index) => {
+                                            // Handle separator lines
+                                            if (line.includes('---')) {
+                                                return <hr key={index} className="my-4 border-gray-300" />;
+                                            }
+                                            // Handle headers (lines ending with :)
+                                            if (line.endsWith(':') && line.length > 1) {
+                                                return <h3 key={index} className="font-semibold text-gray-900 mt-6 mb-2 text-lg">{line}</h3>;
+                                            }
+                                            // Handle empty lines
+                                            if (line.trim() === '') {
+                                                return <br key={index} />;
+                                            }
+                                            // Handle regular content
+                                            return <p key={index} className="mb-2 text-gray-700">{line}</p>;
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <div className="text-gray-400 text-lg mb-2">📝</div>
+                                        <p className="text-gray-500 font-medium">No text content available</p>
+                                        <p className="text-gray-400 text-sm">Run a scrape to see clean text output</p>
+                                    </div>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
