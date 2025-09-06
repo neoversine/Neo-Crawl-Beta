@@ -287,7 +287,7 @@ export default function UsageDashboard() {
         <div className="min-h-screen w-full bg-white text-black">
             {/* Top Bar */}
             <SiteNavbar />
-            <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur">
+            <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur mt-10">
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
                     <div className="flex items-center gap-3">
                         <div className="grid h-10 w-10 place-items-center rounded-xl border border-black bg-white">

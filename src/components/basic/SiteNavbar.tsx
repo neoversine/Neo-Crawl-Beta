@@ -73,7 +73,7 @@ export default function SiteNavbar() {
 
                 {/* Button */}
                 <div className="relative flex w-fit h-fit group">
-                    <Link href="/docs">
+                    <Link href="/login">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

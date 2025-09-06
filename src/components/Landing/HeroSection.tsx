@@ -29,7 +29,7 @@ const HeroSection = () => {
 
                         <div className="relative flex gap-4 w-fit h-fit mt-6 group">
                             <motion.a
-                                href="/docs"
+                                href="/login"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 aria-label="Get started with our web scraping service"

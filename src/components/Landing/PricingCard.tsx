@@ -58,7 +58,11 @@ export const PricingCard = ({
                     </li>
                 ))}
             </ul>
-            <Button variant={popular ? 'primary' : 'outline'} className="w-full">
+            <Button 
+                variant={popular ? 'primary' : 'outline'} 
+                className="w-full"
+                href={cta === 'Get Started' ? '/login' : undefined}
+            >
                 {cta}
             </Button>
         </motion.div>

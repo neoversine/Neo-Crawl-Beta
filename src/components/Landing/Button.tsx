@@ -7,6 +7,7 @@ interface ButtonProps {
     size?: 'sm' | 'md' | 'lg'
     className?: string
     onClick?: () => void
+    href?: string
 }
 export const Button = ({
     children,
@@ -14,6 +15,7 @@ export const Button = ({
     size = 'md',
     className = '',
     onClick,
+    href,
 }: ButtonProps) => {
     const baseClasses =
         'rounded-lg font-medium transition-all flex items-center justify-center'
@@ -28,6 +30,24 @@ export const Button = ({
         md: 'text-base px-6 py-3',
         lg: 'text-lg px-8 py-4',
     }
+
+    if (href) {
+        return (
+            <motion.a
+                href={href}
+                whileHover={{
+                    scale: 1.05,
+                }}
+                whileTap={{
+                    scale: 0.98,
+                }}
+                className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+            >
+                {children}
+            </motion.a>
+        )
+    }
+
     return (
         <motion.button
             whileHover={{

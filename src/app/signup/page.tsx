@@ -114,16 +114,16 @@ export default function SignUp() {
                                     className="flex justify-center items-center w-full px-10 py-2 rounded-lg bg-gradient-to-br from-lime-400/40 via-teal-500/40 to-cyan-400/40
  text-teal-900 font-bold hover:opacity-90 disabled:opacity-60 hover:shadow hover:shadow-green-800 hover:scale-[101%] active:shadow-none active:scale-[100%] uppercase"
                                 >
-                                    Sign In
+                                    Sign Up
                                 </button>
                             </div>
                             {msg && <p className="text-center text-sm mt-2">{msg}</p>}
                         </div>
 
                         <p className="mt-6 text-sm text-center text-gray-600">
-                            Don’t have an account?{" "}
-                            <a href="/signup" className="text-teal-600 font-medium hover:underline">
-                                Sign Up
+                            Already have an account?{" "}
+                            <a href="/login" className="text-teal-600 font-medium hover:underline">
+                                Sign In
                             </a>
                         </p>
                     </div>
