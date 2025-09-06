@@ -16,7 +16,6 @@ export default function ApiKeyManager() {
                     accept: 'application/json',
                     Authorization: `Bearer ${localStorage.getItem("token")}`, // replace with real token handling
                 },
-                withCredentials: true,
             })
             setApiKey(res.data.secret_token)
         } catch (err) {
