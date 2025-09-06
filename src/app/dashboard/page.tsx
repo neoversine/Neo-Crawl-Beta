@@ -248,7 +248,6 @@ export default function UsageDashboard() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`, // if token-based
                     },
                 });
-                console.log(res.data)
                 setData(res.data);
             } catch (err) {
                 console.error("Error fetching dashboard:", err);

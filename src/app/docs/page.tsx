@@ -161,7 +161,7 @@ password=your_secure_password`;
 // Usage
 try {
   const data = await neoCrawl('https://example.com');
-  console.log('Scraped data:', data.result1);
+  // Process your scraped data here
 } catch (error) {
   console.error('Error:', error);
 }`;
@@ -218,7 +218,9 @@ class NeoCrawl {
 // Usage
 const crawler = new NeoCrawl('your_api_key');
 crawler.scrape('https://example.com')
-  .then(data => console.log(data.result1))
+  .then(data => {
+    // Process your data here
+  })
   .catch(error => console.error(error));`;
 
   return (

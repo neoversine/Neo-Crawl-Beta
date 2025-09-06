@@ -38,12 +38,6 @@ export default function SignUp() {
         }
     };
 
-
-
-    const handleSignIn = () => {
-        console.log("Signing in:", { email, password });
-    };
-
     return (
         <div className="min-h-screen w-full bg-[#f9fafb] relative flex flex-col">
             {/* Grid Background */}

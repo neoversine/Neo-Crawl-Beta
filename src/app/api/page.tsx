@@ -23,7 +23,6 @@ export default function ScraperTester() {
     const handleScrape = async () => {
         setError("");
         setScraperResult(null);
-        console.log("ss")
 
         if (!url.trim()) {
             setError("Please enter a valid URL");
@@ -36,7 +35,6 @@ export default function ScraperTester() {
             // Get access token from localStorage
             const accessToken = localStorage.getItem("token");
             if (!accessToken) {
-                console.log("Not logged in. Please login first.")
                 setError("Not logged in. Please login first.");
                 return;
             }
@@ -56,7 +54,7 @@ export default function ScraperTester() {
 
             const secretData = await secretRes.json();
             setSecretToken(secretData.secret_token);
-            console.log(secretData);
+            
             // Step 2: Call /scrapper with x-api-key
             const scraperRes = await fetch(
                 `https://fasttools.neoversine.in/api/scrapper?url=${encodeURIComponent(url)}`,
@@ -66,7 +64,6 @@ export default function ScraperTester() {
                     },
                 }
             );
-            console.log(scraperRes);
 
             if (!scraperRes.ok) {
                 const data = await scraperRes.json();
@@ -80,7 +77,7 @@ export default function ScraperTester() {
                 markdown: JSON.parse(scraperData.result1).markdown,
                 n8n: ""
             })
-            console.log(scraperData);
+            
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(err.message || "Unknown error");
