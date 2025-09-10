@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -16,27 +17,30 @@ export default function Login() {
         setMsg("");
 
         try {
-            const res = await fetch("https://fasttools.neoversine.in/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({
+            const res = await axiosInstance.post(
+                "/auth/login",
+                new URLSearchParams({
                     username: email,
                     password,
                 }),
-            });
+                {
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                }
+            );
 
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem("token", data.access_token);
+            if (res.status === 200) {
+                localStorage.setItem("token", res.data.access_token);
                 setMsg("Login successful! Redirecting...");
-                setTimeout(() => router.push("/dashboard"), 1500);
-            } else {
-                const data = await res.json();
-                setMsg(data.detail || "Login failed");
+                setTimeout(() => router.push("/api"), 1500);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error while logging in:", error);
-            setMsg("Server error. Please try again later.");
+
+            if (error.response && error.response.data) {
+                setMsg(error.response.data.detail || "Login failed");
+            } else {
+                setMsg("Server error. Please try again later.");
+            }
         }
     };
 

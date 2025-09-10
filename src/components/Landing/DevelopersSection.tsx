@@ -4,7 +4,6 @@ import Image from "next/image";
 
 export default function DeveloperSection() {
     const devs = [
-        ,
         {
             name: "Jyotirmoy",
             role: "Frontend & Product",
@@ -12,15 +11,16 @@ export default function DeveloperSection() {
             desc: "Crafts smooth user experiences and manages product vision. Ensures Neo Crawl looks and feels amazing.",
             twitter: "https://twitter.com/jyotirmoy",
             github: "https://github.com/jyotirmoy",
-            linkedin: "https://linkedin.com/in/jyotirmoy"
-        }, {
+            linkedin: "https://linkedin.com/in/jyotirmoy",
+        },
+        {
             name: "Ankon",
             role: "Backend & Infrastructure",
             img: "/landing/dev/ankon.jpeg",
             desc: "Loves building scalable systems and APIs. Handles the engine behind Neo Crawl.",
             twitter: "https://twitter.com/ankon",
             github: "https://github.com/ankon",
-            linkedin: "https://linkedin.com/in/ankon"
+            linkedin: "https://linkedin.com/in/ankon",
         },
         {
             name: "Arka",
@@ -29,35 +29,36 @@ export default function DeveloperSection() {
             desc: "Passionate about automation workflows and AI integrations. The brain behind smart scraping outputs.",
             twitter: "https://twitter.com/arka",
             github: "https://github.com/arka",
-            linkedin: "https://linkedin.com/in/arka"
-        }
+            linkedin: "https://linkedin.com/in/arka",
+        },
     ];
 
-
     return (
-        <section className="py-24 bg-black relative overflow-hidden">
-            {/* Subtle gradient background effect */}
-            {/* <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(99,102,241,0.15),transparent_60%)]"></div> */}
-
-            <div className="flex items-center gap-10 max-w-7xl mx-auto px-6 relative">
+        <section className="py-20 bg-white relative overflow-hidden">
+            <div className="flex max-md:flex-col items-center gap-10 max-w-6xl mx-auto px-6 relative">
                 {/* Section Title */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="text-center"
+                    className="text-center md:w-[30%]"
                 >
-                    <h2 className="text-5xl font-extrabold text-white mb-6">
-                        Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-yellow-400">Developers</span>
+                    <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
+                        Meet the{" "}
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-cyan-900 text-5xl">
+                            Developers
+                        </span>
                     </h2>
-                    <p className="text-lg text-gray-300 max-w-2xl mx-auto px-10">
-                        Built with passion and precision — Neo Crawl is brought to life by developers who love simplifying the complex.
-                    </p>
+                    {/* <p className="text-gray-600 max-w-2xl mx-auto text-base">
+                        Built with passion and precision — Neo Crawl is brought to life by
+                        developers who love simplifying the complex.
+                    </p> */}
                 </motion.div>
 
                 {/* Developer Cards */}
-                <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+                <div className="md:w-[70%] grid grid-cols-3">
                     {devs.map((dev, i) => (
                         <motion.div
                             key={i}
@@ -65,42 +66,31 @@ export default function DeveloperSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: i * 0.2 }}
-                            // whileHover={{ y: -8, scale: 1.05 }}
-                            className="group relative flex flex-col items-center"
+                            className="group relative flex flex-col items-center p-3 transition-all"
                         >
                             {/* Avatar */}
-                            <div className="w-28 h-28 rounded-full overflow-hidden shadow-lg ring-4 ring-purple-500/40 mb-5 mx-auto group-hover:scale-[115%] transition-all duration-700">
+                            <div className="w-32 h-32 md:w-24 md:h-24 rounded-full overflow-hidden shadow ring-4 ring-indigo-200 mb-5 group-hover:scale-110 transition-all duration-500">
                                 <Image
-                                    src={dev?.img || ""}
-                                    alt={dev?.name || ""}
-                                    width={112}
-                                    height={112}
-                                    className="object-cover"
+                                    src={dev.img}
+                                    alt={dev.name}
+                                    width={96}
+                                    height={96}
+                                    className="h-full w-full object-cover"
                                 />
                             </div>
 
                             {/* Name */}
-                            <h3 className="text-xl font-semibold text-white text-center">{dev?.name}</h3>
-                            <p className="text-sm text-gray-400 mt-1">{dev?.role}</p>
-
-                            {/* Social Links (optional) */}
-                            {/* <div className="flex gap-4 mt-4">
-                                {dev?.twitter && (
-                                    <a href={dev.twitter} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-400 transition">
-                                        <i className="fab fa-twitter"></i>
-                                    </a>
-                                )}
-                                {dev?.github && (
-                                    <a href={dev.github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition">
-                                        <i className="fab fa-github"></i>
-                                    </a>
-                                )}
-                            </div> */}
+                            <h3 className="text-lg font-semibold text-gray-900 text-center">
+                                {dev.name}
+                            </h3>
+                            <p className="text-sm text-center text-indigo-600 mt-1">{dev.role}</p>
+                            {/* <p className="text-xs text-gray-500 text-center mt-2">
+                                {dev.desc}
+                            </p> */}
                         </motion.div>
                     ))}
                 </div>
             </div>
         </section>
-
     );
 }

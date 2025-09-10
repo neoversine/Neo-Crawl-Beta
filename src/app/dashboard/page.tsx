@@ -14,6 +14,7 @@ import ApiKeyManager from "@/components/Dashboard/ApiKeyManager";
 import DailyCalls, { CustomTooltip } from "@/components/Dashboard/DailyCalls";
 import SiteFooter from "@/components/basic/SiteFooter";
 import SiteNavbar from "@/components/basic/SiteNavbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 // ---------------- Types ----------------
 interface DailyTrendItem {
@@ -62,38 +63,9 @@ interface ProgressRingProps {
     stroke?: number;
 }
 
-// ---------------- Default Data ----------------
-const defaultData: DashboardData = {
-    username: "jyoti",
-    plan: 0,
-    plan_limit: 10,
-    calls_today: 1,
-    calls_made_month: 1,
-    remaining_quota: 9,
-    quota_used_percent: 10,
-    daily_trend: [
-        { date: "2025-08-15", calls: 0 },
-        { date: "2025-08-16", calls: 0 },
-        { date: "2025-08-17", calls: 0 },
-        { date: "2025-08-18", calls: 0 },
-        { date: "2025-08-19", calls: 0 },
-        { date: "2025-08-20", calls: 0 },
-        { date: "2025-08-21", calls: 1 },
-    ],
-    comparison_today_vs_yesterday: { status: "increased", today: 1, yesterday: 0 },
-    average_daily_calls: 0.14,
-    last_day_reset: "2025-08-21",
-    last_month_reset: "2025-08-01",
-};
-
 // ---------------- Utils ----------------
 function classNames(...c: (string | undefined | null | false)[]): string {
     return c.filter(Boolean).join(" ");
-}
-
-function formatShort(dateStr: string): string {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-IN", { month: "short", day: "2-digit" });
 }
 
 
@@ -243,7 +215,6 @@ export default function UsageDashboard() {
         const fetchDashboard = async () => {
             try {
                 const res = await axios.get<DashboardData>("https://fasttools.neoversine.in/usage/dashboard", {
-                    // withCredentials: false, // 🔑 important if cookies/sessions needed
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`, // if token-based
                     },
@@ -283,156 +254,158 @@ export default function UsageDashboard() {
     const usageLeftPercent = ((data.remaining_quota / data.plan_limit) * 100).toFixed(0);
 
     return (
-        <div className="min-h-screen w-full bg-white text-black">
-            {/* Top Bar */}
-            <SiteNavbar />
-            <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur mt-10">
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-                    <div className="flex items-center gap-3">
-                        <div className="grid h-10 w-10 place-items-center rounded-xl border border-black bg-white">
-                            <CircleEllipsis className="h-5 w-5" />
-                        </div>
-                        <div>
-                            <h1 className="text-xl font-bold leading-none">Usage Dashboard</h1>
-                            <p className="text-xs text-black/60">Welcome back, {data.username}</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-black/70">
-                        <span className="rounded-full border border-black/10 bg-white px-3 py-1">Plan: {planName}</span>
-                        <span className="max-md:hidden rounded-full border border-black/10 bg-white px-3 py-1">Limit: {data.plan_limit}/month</span>
-                    </div>
-                </div>
-            </header>
-
-            {/* Content */}
-            <main className="mx-auto max-w-7xl px-4 py-6">
-
-                <ApiKeyManager />
-
-                <div className="w-full h-[1px] mb-4 bg-gradient-to-r from-gray-200 via-gray-700 to-gray-200"></div>
-                {/* KPI Grid */}
-
-                <h1 className="text-xl font-semibold mb-4">Your Usage:</h1>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    <StatCard
-                        title="Calls Today"
-                        value={data.calls_today}
-                        subtitle={`Part of ${data.plan_limit}/month`}
-                        icon={PhoneCall}
-                    // accent
-                    />
-                    <StatCard
-                        title="Remaining Quota"
-                        value={data.remaining_quota}
-                        subtitle={`${usageLeftPercent}% of monthly limit left`}
-                        icon={Gauge}
-                    />
-                    <StatCard
-                        title="Monthly Calls"
-                        value={data.calls_made_month}
-                        subtitle={`Avg/day ${data.average_daily_calls}`}
-                        icon={Zap}
-                    />
-                    <StatCard
-                        title="Today vs Yesterday"
-                        value={`${todayVsY.today} vs ${todayVsY.yesterday}`}
-                        subtitle={todayVsY.status === "increased" ? "Up today" : "Down today"}
-                        icon={TrendingUp}
-                    />
-                </div>
-
-                {/* Charts + Progress */}
-                <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-                    <Section
-                        title="Daily Calls (Last 7 Days)"
-                        action={
-                            <div className="flex items-center gap-2 text-xs text-black/60">
-                                <CalendarClock className="h-4 w-4" />
-                                <span>Resets monthly</span>
+        <ProtectedRoute>
+            <div className="min-h-screen w-full bg-white text-black">
+                {/* Top Bar */}
+                <SiteNavbar />
+                <header className="sticky top-0 z-10 border-b border-black/10 bg-white/80 backdrop-blur mt-10">
+                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+                        <div className="flex items-center gap-3">
+                            <div className="grid h-10 w-10 place-items-center rounded-xl border border-black bg-white">
+                                <CircleEllipsis className="h-5 w-5" />
                             </div>
-                        }
-                    >
-                        <DailyCalls data={data.daily_trend} />
-                    </Section>
-
-
-                    <Section title="Monthly Usage">
-                        <div className="flex items-center gap-6">
-                            <ProgressRing value={data.quota_used_percent} />
                             <div>
-                                <p className="text-sm text-black/60">You&apos;ve used</p>
-                                <p className="text-3xl font-bold">{data.calls_made_month} / {data.plan_limit}</p>
-                                <p className="mt-2 text-sm text-black/60">{data.remaining_quota} remaining this month</p>
-                                <div className="mt-4 flex items-center gap-2 text-xs text-black/70">
-                                    <CheckCircle2 className="h-4 w-4" />
-                                    <span>Soft limit alerts enabled</span>
+                                <h1 className="text-xl font-bold leading-none">Usage Dashboard</h1>
+                                <p className="text-xs text-black/60">Welcome back, {data.username}</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-black/70">
+                            <span className="rounded-full border border-black/10 bg-white px-3 py-1">Plan: {planName}</span>
+                            <span className="max-md:hidden rounded-full border border-black/10 bg-white px-3 py-1">Limit: {data.plan_limit}/month</span>
+                        </div>
+                    </div>
+                </header>
+
+                {/* Content */}
+                <main className="mx-auto max-w-7xl px-4 py-6">
+
+                    <ApiKeyManager />
+
+                    <div className="w-full h-[1px] mb-4 bg-gradient-to-r from-gray-200 via-gray-700 to-gray-200"></div>
+                    {/* KPI Grid */}
+
+                    <h1 className="text-xl font-semibold mb-4">Your Usage:</h1>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        <StatCard
+                            title="Calls Today"
+                            value={data.calls_today}
+                            subtitle={`Part of ${data.plan_limit}/month`}
+                            icon={PhoneCall}
+                        // accent
+                        />
+                        <StatCard
+                            title="Remaining Quota"
+                            value={data.remaining_quota}
+                            subtitle={`${usageLeftPercent}% of monthly limit left`}
+                            icon={Gauge}
+                        />
+                        <StatCard
+                            title="Monthly Calls"
+                            value={data.calls_made_month}
+                            subtitle={`Avg/day ${data.average_daily_calls}`}
+                            icon={Zap}
+                        />
+                        <StatCard
+                            title="Today vs Yesterday"
+                            value={`${todayVsY.today} vs ${todayVsY.yesterday}`}
+                            subtitle={todayVsY.status === "increased" ? "Up today" : "Down today"}
+                            icon={TrendingUp}
+                        />
+                    </div>
+
+                    {/* Charts + Progress */}
+                    <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+                        <Section
+                            title="Daily Calls (Last 7 Days)"
+                            action={
+                                <div className="flex items-center gap-2 text-xs text-black/60">
+                                    <CalendarClock className="h-4 w-4" />
+                                    <span>Resets monthly</span>
+                                </div>
+                            }
+                        >
+                            <DailyCalls data={data.daily_trend} />
+                        </Section>
+
+
+                        <Section title="Monthly Usage">
+                            <div className="flex items-center gap-6">
+                                <ProgressRing value={data.quota_used_percent} />
+                                <div>
+                                    <p className="text-sm text-black/60">You&apos;ve used</p>
+                                    <p className="text-3xl font-bold">{data.calls_made_month} / {data.plan_limit}</p>
+                                    <p className="mt-2 text-sm text-black/60">{data.remaining_quota} remaining this month</p>
+                                    <div className="mt-4 flex items-center gap-2 text-xs text-black/70">
+                                        <CheckCircle2 className="h-4 w-4" />
+                                        <span>Soft limit alerts enabled</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Section>
+                        </Section>
 
-                    <Section title="Today vs Yesterday (Bars)">
-                        <div className="h-64 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    data={[
-                                        { label: "Yesterday", value: todayVsY.yesterday },
-                                        { label: "Today", value: todayVsY.today },
-                                    ]}
-                                    margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-                                >
-                                    <CartesianGrid stroke="#E5E7EB" strokeDasharray="3 3" />
-                                    <XAxis dataKey="label" tick={{ fill: "#000" }} axisLine={{ stroke: "#000" }} tickLine={{ stroke: "#000" }} />
-                                    <YAxis allowDecimals={false} tick={{ fill: "#000" }} axisLine={{ stroke: "#000" }} tickLine={{ stroke: "#000" }} />
-                                    <Tooltip cursor={{ fill: "rgba(96,165,250,0.2)", radius: 8 }} content={<CustomTooltip />}
-                                    // contentStyle={{ background: "#fff", border: "1px solid #000", color: "#000" }} 
-                                    />
-                                    <Legend />
-                                    <Bar dataKey="value" name="Calls" fill="#000000" radius={[8, 8, 0, 0]} activeBar={{ fill: "#60A5FA" }} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </Section>
-                </div>
+                        <Section title="Today vs Yesterday (Bars)">
+                            <div className="h-64 w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        data={[
+                                            { label: "Yesterday", value: todayVsY.yesterday },
+                                            { label: "Today", value: todayVsY.today },
+                                        ]}
+                                        margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+                                    >
+                                        <CartesianGrid stroke="#E5E7EB" strokeDasharray="3 3" />
+                                        <XAxis dataKey="label" tick={{ fill: "#000" }} axisLine={{ stroke: "#000" }} tickLine={{ stroke: "#000" }} />
+                                        <YAxis allowDecimals={false} tick={{ fill: "#000" }} axisLine={{ stroke: "#000" }} tickLine={{ stroke: "#000" }} />
+                                        <Tooltip cursor={{ fill: "rgba(96,165,250,0.2)", radius: 8 }} content={<CustomTooltip />}
+                                        // contentStyle={{ background: "#fff", border: "1px solid #000", color: "#000" }} 
+                                        />
+                                        <Legend />
+                                        <Bar dataKey="value" name="Calls" fill="#000000" radius={[8, 8, 0, 0]} activeBar={{ fill: "#60A5FA" }} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </Section>
+                    </div>
 
-                {/* Resets + Meta */}
-                <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-                    <Section title="Reset Information">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
-                                <p className="text-black/60">Last Day Reset</p>
-                                <p className="mt-1 text-lg font-semibold text-gray-600">{new Date(data.last_day_reset).toLocaleDateString()}</p>
+                    {/* Resets + Meta */}
+                    <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <Section title="Reset Information">
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div className="rounded-xl border border-black/10 bg-white p-4">
+                                    <p className="text-black/60">Last Day Reset</p>
+                                    <p className="mt-1 text-lg font-semibold text-gray-600">{new Date(data.last_day_reset).toLocaleDateString()}</p>
+                                </div>
+                                <div className="rounded-xl border border-black/10 bg-white p-4">
+                                    <p className="text-black/60">Last Month Reset</p>
+                                    <p className="mt-1 text-lg font-semibold text-gray-600">{new Date(data.last_month_reset).toLocaleDateString()}</p>
+                                </div>
                             </div>
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
-                                <p className="text-black/60">Last Month Reset</p>
-                                <p className="mt-1 text-lg font-semibold text-gray-600">{new Date(data.last_month_reset).toLocaleDateString()}</p>
+                        </Section>
+                        <Section title="Plan Details">
+                            <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div className="rounded-xl border border-black/10 bg-white p-4">
+                                    <p className="text-black/60">Current Plan</p>
+                                    <p className="mt-1 text-lg font-semibold text-gray-600">{planName}</p>
+                                </div>
+                                <div className="rounded-xl border border-black/10 bg-white p-4">
+                                    <p className="text-black/60">Monthly Limit</p>
+                                    <p className="mt-1 text-lg font-semibold text-gray-600">{data.plan_limit}</p>
+                                </div>
+                                <div className="rounded-xl border border-black/10 bg-white p-4">
+                                    <p className="text-black/60">Used This Month</p>
+                                    <p className="mt-1 text-lg font-semibold text-gray-600">{data.calls_made_month}</p>
+                                </div>
+                                <div className="rounded-xl border border-black/10 bg-white p-4">
+                                    <p className="text-black/60">Remaining This Month</p>
+                                    <p className="mt-1 text-lg font-semibold text-gray-600">{data.remaining_quota}</p>
+                                </div>
                             </div>
-                        </div>
-                    </Section>
-                    <Section title="Plan Details">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
-                                <p className="text-black/60">Current Plan</p>
-                                <p className="mt-1 text-lg font-semibold text-gray-600">{planName}</p>
-                            </div>
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
-                                <p className="text-black/60">Monthly Limit</p>
-                                <p className="mt-1 text-lg font-semibold text-gray-600">{data.plan_limit}</p>
-                            </div>
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
-                                <p className="text-black/60">Used This Month</p>
-                                <p className="mt-1 text-lg font-semibold text-gray-600">{data.calls_made_month}</p>
-                            </div>
-                            <div className="rounded-xl border border-black/10 bg-white p-4">
-                                <p className="text-black/60">Remaining This Month</p>
-                                <p className="mt-1 text-lg font-semibold text-gray-600">{data.remaining_quota}</p>
-                            </div>
-                        </div>
-                    </Section>
-                </div>
+                        </Section>
+                    </div>
 
 
-            </main>
-        </div>
+                </main>
+            </div>
+        </ProtectedRoute>
     );
 }

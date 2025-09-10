@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react"; // 👈 install: npm i lucide-react
 import { useRouter } from "next/navigation";
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function SignUp() {
     const [email, setEmail] = useState("");
@@ -19,22 +20,23 @@ export default function SignUp() {
         setMsg("");
 
         try {
-            const res = await fetch("https://fasttools.neoversine.in/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: email, password }),
+            const res = await axiosInstance.post("/auth/register", {
+                username: email,
+                password,
             });
 
-            if (res.ok) {
+            if (res.status === 200 || res.status === 201) {
                 setMsg("Registered successfully! Redirecting...");
                 setTimeout(() => router.push("/login"), 1500);
-            } else {
-                const data = await res.json();
-                setMsg(data.detail || "Registration failed");
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error while registering:", error);
-            setMsg("Server error. Please try again later.");
+
+            if (error.response && error.response.data) {
+                setMsg(error.response.data.detail || "Registration failed");
+            } else {
+                setMsg("Server error. Please try again later.");
+            }
         }
     };
 
@@ -45,9 +47,9 @@ export default function SignUp() {
                 className="absolute inset-0 z-0"
                 style={{
                     backgroundImage: `
-            linear-gradient(to right, #0b4f4a30 1px, transparent 1px),
-            linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
-          `,
+        linear-gradient(to right, #0b4f4a30 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
+      `,
                     backgroundSize: "40px 40px",
                     WebkitMaskImage:
                         "radial-gradient(ellipse 70% 60% at 50% 0%, #000 60%, transparent 100%)",
@@ -65,10 +67,10 @@ export default function SignUp() {
                 >
                     <div className="w-full max-w-md bg-white rounded-2xl border border-gray-200 p-8">
                         <h2 className="text-3xl font-bold text-center text-gray-900">
-                            Welcome Back 👋
+                            Create an Account ✨
                         </h2>
                         <p className="text-gray-500 text-center mt-2">
-                            Sign in to continue to your account
+                            Register now to get started with your journey
                         </p>
 
                         <div className="mt-8 space-y-5">
@@ -106,9 +108,9 @@ export default function SignUp() {
                                 <button
                                     onClick={handleRegister}
                                     className="flex justify-center items-center w-full px-10 py-2 rounded-lg bg-gradient-to-br from-lime-400/40 via-teal-500/40 to-cyan-400/40
- text-teal-900 font-bold hover:opacity-90 disabled:opacity-60 hover:shadow hover:shadow-green-800 hover:scale-[101%] active:shadow-none active:scale-[100%] uppercase"
+                text-teal-900 font-bold hover:opacity-90 disabled:opacity-60 hover:shadow hover:shadow-green-800 hover:scale-[101%] active:shadow-none active:scale-[100%] uppercase"
                                 >
-                                    Sign Up
+                                    Register
                                 </button>
                             </div>
                             {msg && <p className="text-center text-sm mt-2">{msg}</p>}
@@ -124,5 +126,6 @@ export default function SignUp() {
                 </motion.div>
             </div>
         </div>
+
     );
 }
