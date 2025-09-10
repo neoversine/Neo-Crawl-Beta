@@ -10,7 +10,6 @@ export default function SignUp() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
-    const [username, setUsername] = useState("");
     const [msg, setMsg] = useState("");
     const router = useRouter();
 
@@ -29,6 +28,7 @@ export default function SignUp() {
                 setMsg("Registered successfully! Redirecting...");
                 setTimeout(() => router.push("/login"), 1500);
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             console.error("Error while registering:", error);
 

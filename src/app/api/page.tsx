@@ -1,6 +1,6 @@
 'use client'
 import SiteNavbar from "@/components/basic/SiteNavbar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from 'framer-motion'
 import ReactMarkdown from "react-markdown";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function ScraperTester() {
     const [url, setUrl] = useState<string>("");
 
-    const [format, setFormat] = useState<string>("");
+    // const [format, setFormat] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<"json" | "markdown" | "text" | "ai">("markdown");
     const [result, setResult] = useState<{ json: string; markdown: string; text: string }>({
@@ -19,7 +19,9 @@ export default function ScraperTester() {
         text: "",
     });
     const [error, setError] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [scraperResult, setScraperResult] = useState<unknown>(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [secretToken, setSecretToken] = useState("");
 
     const handleScrape = async () => {

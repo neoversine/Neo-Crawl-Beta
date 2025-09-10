@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
+    XAxis, YAxis, CartesianGrid, Tooltip,
     ResponsiveContainer, BarChart, Bar, Legend,
 } from "recharts";
 import {
@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import ApiKeyManager from "@/components/Dashboard/ApiKeyManager";
 import DailyCalls, { CustomTooltip } from "@/components/Dashboard/DailyCalls";
-import SiteFooter from "@/components/basic/SiteFooter";
+// import SiteFooter from "@/components/basic/SiteFooter";
 import SiteNavbar from "@/components/basic/SiteNavbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
